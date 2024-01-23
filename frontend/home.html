@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- iziToast CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="./images/library logo.png" alt="Logo" style="height: 40px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item" id="registerNav">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
+                </li>
+                <li class="nav-item" id="loginNav">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+                </li>
+                <li class="nav-item" id="logoutNav" style="display:none;">
+                    <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                </li>
+                <li class="nav-item" id="adminPanelNav" style="display:none;">
+                    <a class="nav-link" href="admin.html">Admin Panel</a>
+                </li>
+                <li class="nav-item" id="myLoansNav" style="display:none;">
+                    <a class="nav-link" href="#" onclick="showMyLoans()">My Loans</a>
+                </li>
+
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" class="form-control" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" class="form-control" id="registerUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerName">Name</label>
+                            <input type="text" class="form-control" id="registerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerCity">City</label>
+                            <input type="text" class="form-control" id="registerCity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerAge">Age</label>
+                            <input type="number" class="form-control" id="registerAge" required>
+                        </div>
+                        <!-- Role Dropdown -->
+                        <div class="form-group">
+                            <label for="registerRole">Role</label>
+                            <select class="form-control" id="registerRole">
+                                <option value="1">Regular User</option>
+                                <option value="2">Admin</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Loan Modal -->
+    <div class="modal fade" id="loanModal" tabindex="-1" role="dialog" aria-labelledby="loanModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loanModalLabel">My Loans</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="loansContainer">
+                    <!-- User loans will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container mt-4" id="booksContainer">
+        <!-- Books will be displayed here -->
+    </div>
+
+
+    <!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- iziToast JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    <script>
+        const mysvr = 'http://127.0.0.1:5000';
+
+        function checkUserRole() {
+            const accessToken = sessionStorage.getItem('accessToken');
+            axios.get(`${mysvr}/get_user_role`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    sessionStorage.setItem('userRole', response.data.role);
+                    updateNavbar();
+                })
+                .catch(error => {
+                    console.error('Error fetching user role:', error);
+                    // Handle the error (e.g., show an error message)
+                });
+        }
+
+        function getUserId() {
+            const accessToken = sessionStorage.getItem('accessToken');
+            axios.get(`${mysvr}/get_user_id`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    sessionStorage.setItem('userId', response.data.id); // Make sure this key matches
+                    // other operations
+                })
+                .catch(error => {
+                    console.error('Error retrieving user ID:', error);
+                    // error handling
+                });
+        }
+
+        function endLoan(loanId) {
+            console.log("Attempting to end loan with ID:", loanId); // For debugging
+            const accessToken = sessionStorage.getItem('accessToken');
+            axios.delete(`${mysvr}/end_loan/${loanId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    iziToast.success({ title: 'Loan Ended', message: 'The loan has been successfully ended.' });
+                    showMyLoans(); // Refresh the list of loans
+                })
+                .catch(error => {
+                    iziToast.error({ title: 'Error', message: 'Failed to end loan.' });
+                });
+        }
+
+
+        function showMyLoans() {
+            const accessToken = sessionStorage.getItem('accessToken');
+            axios.get(`${mysvr}/my_loans`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    const loansContainer = document.getElementById('loansContainer');
+                    loansContainer.innerHTML = ''; // Clear existing loans
+
+                    response.data.forEach(loan => {
+                        loansContainer.innerHTML += `
+                <div class="loan-card">
+                    <p>Book ID: ${loan.book_id}</p>
+                    <p>Loan Date: ${loan.loan_date}</p>
+                    <p>Return Date: ${loan.return_date}</p>
+                    <p>Duration: ${loan.duration} days</p>
+                    <button class="btn btn-danger end-loan-btn" data-loanid="${loan.id}">End Loan</button>
+                </div>
+            `;
+                    });
+
+                    // Setting up event listeners for "End Loan" buttons
+                    document.querySelectorAll('.end-loan-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const loanId = this.getAttribute('data-loanid');
+                            endLoan(loanId);
+                        });
+                    });
+
+                    $('#loanModal').modal('show');
+                })
+                .catch(error => {
+                    console.error('Error fetching loans:', error);
+                });
+        }
+
+
+
+        function showLoanModal(bookId) {
+            document.getElementById('loanBookId').value = bookId;
+            $('#loanModal').modal('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Access and interact with form elements here
+            const loanBookId = document.getElementById('loanBookId');
+            const loanDate = document.getElementById('loanDate');
+
+            // Add event listener to the loan form
+            document.getElementById('loanForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Get the values from the form elements
+                const bookId = loanBookId.value;
+                const date = loanDate.value;
+                const customerId = sessionStorage.getItem('userId'); // Assuming you store the user ID in the session
+
+                // Call the createLoan function with the form values
+                createLoan(bookId, date, customerId);
+            });
+        });
+
+
+
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            login(username, password);
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+            const name = document.getElementById('registerName').value;
+            const city = document.getElementById('registerCity').value;
+            const age = document.getElementById('registerAge').value;
+            const role = document.getElementById('registerRole').value;
+
+            register(username, password, name, city, age, role);
+        });
+
+
+        function login(username, password) {
+            axios.post(`${mysvr}/login`, {
+                username: username,
+                password: password
+            })
+                .then(response => {
+                    // Save the access token and user ID in sessionStorage
+                    sessionStorage.setItem('accessToken', response.data.token);
+
+                    // Close the login modal
+                    $('#loginModal').modal('hide');
+
+                    // Check user role after successful login
+                    checkUserRole();
+                    getUserId()
+
+                    // Show a success message
+                    iziToast.success({ title: 'Login', message: 'Logged in successfully' });
+                    location.reload(true)
+                })
+                .catch(error => {
+                    // Show an error message if login fails
+                    iziToast.error({ title: 'Login Failed', message: error.response.data.error });
+                });
+        }
+
+
+        function register(username, password, name, city, age, role) {
+            axios.post(`${mysvr}/customers`, {
+                username: username,
+                password: password,
+                role: role,
+                name: name,
+                city: city,
+                age: age
+            })
+                .then(response => {
+                    $('#registerModal').modal('hide');
+                    iziToast.success({ title: 'Register', message: 'Registered successfully' });
+                })
+                .catch(error => {
+                    iziToast.error({ title: 'Registration Failed', message: error.response.data.error });
+                });
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            updateNavbar();
+            iziToast.show({ title: 'Logout', message: 'You have been logged out successfully' });
+            window.location.reload();
+        }
+
+        function fetchBooks() {
+            const accessToken = sessionStorage.getItem('accessToken');
+            axios.get('http://127.0.0.1:5000/books', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    const booksContainer = document.getElementById('booksContainer');
+                    booksContainer.innerHTML = ''; // Clear existing books
+
+                    response.data.forEach(book => {
+                        booksContainer.innerHTML += `
+                <div class="card" style="width: 18rem;">
+                    <img src="${book.image_url}" class="card-img-top" alt="${book.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${book.name}</h5>
+                        <p class="card-text">${book.author} - ${book.year_published}</p>
+                        <button onclick="createLoan(${book.id}, '${book.loantype}')" class="btn btn-primary">Loan</button>
+                    </div>
+                </div>
+            `;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching books:', error);
+                });
+        }
+
+
+        function showLoanModal(bookId, loantype) {
+            window.selectedBookId = bookId;
+            window.selectedLoanType = loantype; // Store the loan type
+            $('#loanModal').modal('show');
+        }
+
+        function createLoan(bookId, loantype) {
+            const currentDate = new Date();
+            const loanDate = currentDate.toISOString().split('T')[0]; // Current date in "YYYY-MM-DD"
+
+            const accessToken = sessionStorage.getItem('accessToken');
+            const customerId = sessionStorage.getItem('userId'); // Assume this is correctly stored
+
+            const loanData = {
+                book_id: bookId,
+                loan_date: loanDate,
+                customer_id: parseInt(customerId),
+                loantype: loantype
+            };
+
+            console.log('Sending POST request to /loans with data:', loanData);
+
+
+            axios.post('http://127.0.0.1:5000/loans', loanData, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    $('#loanModal').modal('hide');
+                    iziToast.success({ title: 'Loan', message: 'Loan created successfully' });
+                })
+                .catch(error => {
+                    console.error('Error creating loan:', error.response || error);
+                    iziToast.error({ title: 'Loan Failed', message: error.response?.data?.error || 'Error creating loan' });
+                });
+        }
+
+
+
+
+        function updateNavbar() {
+            let accessToken = sessionStorage.getItem('accessToken');
+            let userRole = sessionStorage.getItem('userRole');
+
+            // Check if user is logged in (accessToken exists)
+            if (accessToken) {
+                // User is logged in
+                // Hide login and register options
+                document.getElementById('loginNav').style.display = 'none';
+                document.getElementById('registerNav').style.display = 'none';
+
+                // Show logout option
+                document.getElementById('logoutNav').style.display = 'block';
+
+                // Show 'My Loans' option
+                document.getElementById('myLoansNav').style.display = 'block';
+
+                // Check user role
+                if (userRole === '2') { // Assuming '2' is the role for admin
+                    // Show admin panel for admin users
+                    document.getElementById('adminPanelNav').style.display = 'block';
+                } else {
+                    // Hide admin panel for non-admin users
+                    document.getElementById('adminPanelNav').style.display = 'none';
+                }
+            } else {
+                // User is not logged in
+                // Show login and register options
+                document.getElementById('loginNav').style.display = 'block';
+                document.getElementById('registerNav').style.display = 'block';
+
+                // Hide logout, 'My Loans', and admin panel options
+                document.getElementById('logoutNav').style.display = 'none';
+                document.getElementById('myLoansNav').style.display = 'none';
+                document.getElementById('adminPanelNav').style.display = 'none';
+            }
+        }
+
+
+        window.onload = function () {
+            updateNavbar();
+            fetchBooks();
+
+        }
+    </script>
+</body>
+
+</html>

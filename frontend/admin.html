@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.png">
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Customize label text color to black */
+        label {
+            color: #000;
+        }
+
+        table {
+            color: #e5f0ef;
+            /* Adjust the hex color code to a lighter shade */
+        }
+        table {
+    background-color: #f2f2f2; /* Use a lighter background color */
+}
+
+
+
+    </style>
+</head>
+
+<body class="bg-dark text-light">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="home.html">
+            <!-- Add the logo image here -->
+            <img src="./images/favicon.png" alt="Library Logo" width="30" height="30" class="d-inline-block align-top">
+            Library
+        </a>
+    </nav>
+    <!-- Content for Admin Panel - Books Section -->
+    <div class="container mt-4">
+        <h2>Books</h2>
+
+        <!-- Search Input -->
+        <div class="form-group">
+            <input type="text" class="form-control" id="bookSearch" placeholder="Search by book name">
+        </div>
+
+        <!-- Create Book Button -->
+        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#createBookModal">Create Book</button>
+
+        <!-- Books Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Year Published</th>
+                    <th>Loan Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="booksContainer">
+                <!-- Books will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="createBookModal" tabindex="-1" role="dialog" aria-labelledby="createBookModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createBookModalLabel">Create Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="createBookForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="bookName">Name</label> <!-- Add 'for' attribute with 'id' of input field -->
+                            <input type="text" class="form-control" id="bookName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookAuthor">Author</label> <!-- Add 'for' attribute with 'id' of input field -->
+                            <input type="text" class="form-control" id="bookAuthor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookYear">Year Published</label>
+                            <!-- Add 'for' attribute with 'id' of input field -->
+                            <input type="number" class="form-control" id="bookYear" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookLoanType">Loan Type</label>
+                            <!-- Add 'for' attribute with 'id' of input field -->
+                            <select class="form-control" id="bookLoanType" required>
+                                <option value="1">1 - 10 Days</option>
+                                <option value="2">2 - 5 Days</option>
+                                <option value="3">3 - 2 Days</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookImage">Book Image</label>
+                            <!-- Add 'for' attribute with 'id' of input field -->
+                            <input type="file" class="form-control-file" id="bookImage" accept=".jpg, .jpeg, .png"
+                                required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="createBookBtn">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Update Book Modal -->
+    <div class="modal fade" id="updateBookModal" tabindex="-1" role="dialog" aria-labelledby="updateBookModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateBookModalLabel">Update Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateBookForm">
+                        <input type="hidden" id="updateBookId">
+                        <div class="form-group">
+                            <label for="updateBookName">Name</label>
+                            <input type="text" class="form-control" id="updateBookName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBookAuthor">Author</label>
+                            <input type="text" class="form-control" id="updateBookAuthor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBookYear">Year Published</label>
+                            <input type="number" class="form-control" id="updateBookYear" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBookLoanType">Loan Type</label>
+                            <select class="form-control" id="updateBookLoanType" required>
+                                <option value="1">1 - 10 Days</option>
+                                <option value="2">2 - 5 Days</option>
+                                <option value="3">3 - 2 Days</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateBookBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Book Modal -->
+    <div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog" aria-labelledby="deleteBookModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteBookModalLabel">Delete Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this book?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="deleteBookBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content for Admin Panel - Customers Section -->
+    <!-- Content for Admin Panel - Customers Section -->
+    <div class="container mt-4">
+        <h2>Customers</h2>
+
+        <!-- Search Input -->
+        <div class="form-group">
+            <input type="text" class="form-control" id="customerSearch" placeholder="Search by customer name">
+        </div>
+
+        <!-- Create Customer Button -->
+        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#createCustomerModal">Create
+            Customer</button>
+
+        <!-- Customers Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>City</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="customersTableBody">
+                <!-- Customers will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Create Customer Modal -->
+    <div class="modal fade" id="createCustomerModal" tabindex="-1" role="dialog"
+        aria-labelledby="createCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCustomerModalLabel">Create Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="createCustomerForm">
+                        <div class="form-group">
+                            <label for="customerName">Name</label>
+                            <input type="text" class="form-control" id="customerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerUsername">Username</label>
+                            <input type="text" class="form-control" id="customerUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerPassword">Password</label>
+                            <input type="password" class="form-control" id="customerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerCity">City</label>
+                            <input type="text" class="form-control" id="customerCity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerAge">Age</label>
+                            <input type="number" class="form-control" id="customerAge" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerRole">Role</label>
+                            <select class="form-control" id="customerRole" required>
+                                <option value="1">Regular User</option>
+                                <option value="2">Admin User</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="createCustomerBtn">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Update Customer Modal -->
+    <div class="modal fade" id="updateCustomerModal" tabindex="-1" role="dialog"
+        aria-labelledby="updateCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateCustomerModalLabel">Update Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateCustomerForm">
+                        <!-- Include fields for updating customer details here -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateCustomerBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Customer Confirmation Modal -->
+    <div class="modal fade" id="deleteCustomerModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCustomerModalLabel">Confirm Delete Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this customer?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteCustomerBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content for Admin Panel - Loans Section -->
+    <div class="container mt-4">
+        <h2>Loans</h2>
+
+        <!-- Search Input -->
+        <div class="form-group">
+            <input type="text" class="form-control" id="loanSearch" placeholder="Search by customer name or book name">
+        </div>
+
+        <!-- Loans Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer id</th>
+                    <th>Book id</th>
+                    <th>Loan Date</th>
+                    <th>Return Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="loanList">
+                <!-- Loans will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Delete Loan Confirmation Modal -->
+    <div class="modal fade" id="deleteLoanModal" tabindex="-1" role="dialog" aria-labelledby="deleteLoanModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteLoanModalLabel">Confirm Delete Loan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this loan?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteLoanBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Add Bootstrap JS and jQuery links here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    <script>
+        const mysvr = 'http://127.0.0.1:5000';
+
+        // books crud
+
+        // Define the createBook function
+        function createBook() {
+            const accessToken = sessionStorage.getItem('accessToken');
+            if (!accessToken) {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Access token not found. Please log in again.',
+                });
+                return;
+            }
+
+            const name = document.getElementById('bookName').value;
+            const author = document.getElementById('bookAuthor').value;
+            const yearPublished = document.getElementById('bookYear').value;
+            const loanType = document.getElementById('bookLoanType').value;
+            const imageFile = document.getElementById('bookImage').files[0];
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('author', author);
+            formData.append('year_published', yearPublished); // Match this with your server-side expected field name
+            formData.append('loantype', loanType); // Match this with your server-side expected field name
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
+            axios.post(`${mysvr}/books`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            })
+                .then((response) => {
+                    iziToast.success({
+                        title: 'Success',
+                        message: 'Book created successfully!',
+                    });
+                    clearCreateBookForm()
+                })
+                .catch((error) => {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Failed to create book. Please try again.',
+                    });
+                    console.error('Error creating book:', error.response || error);
+                });
+        }
+
+
+        // Call the createBook function when the "Create" button is clicked
+        document.getElementById('createBookBtn').addEventListener('click', createBook);
+
+        // Function to clear the create book form inputs
+        function clearCreateBookForm() {
+            document.getElementById('bookName').value = '';
+            document.getElementById('bookAuthor').value = '';
+            document.getElementById('bookYear').value = '';
+            document.getElementById('bookLoanType').value = '1'; // Set a default value if needed
+            document.getElementById('bookImage').value = ''; // Clear the file input
+        }
+
+
+
+        function displayBooks(books) {
+            const booksContainer = document.getElementById('booksContainer');
+            booksContainer.innerHTML = '';
+
+            books.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book';
+
+                const bookContent = `
+            <h3>${book.name}</h3>
+            <p>Author: ${book.author}</p>
+            <p>Year Published: ${book.year_published}</p>
+            <p>Loan Type: ${book.loantype}</p>
+            <img src="${book.image_url}" alt="${book.name}" style="width:100px; height:auto;">
+        `;
+                bookDiv.innerHTML = bookContent;
+                booksContainer.appendChild(bookDiv);
+            });
+        }
+
+
+
+
+        async function get_all_books() {
+            const accessToken = sessionStorage.getItem('accessToken');
+            const response = await axios.get(`${mysvr}/all_books`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    console.log(response.data);
+                    displayBooks(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching books:', error.response || error);
+                });
+        }
+
+
+        // Function to update a book
+        function updateBook(bookId, updatedData) {
+            // Retrieve the access token from session storage
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                // Handle the case where the access token is not available
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Access token not found. Please log in again.',
+                });
+                return;
+            }
+
+            axios.put(`${mysvr}/books/${bookId}`, updatedData, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`, // Include the access token in the headers
+                },
+            })
+                .then((response) => {
+                    // Handle the success response
+                    iziToast.success({
+                        title: 'Success',
+                        message: 'Book updated successfully.',
+                    });
+                })
+                .catch((error) => {
+                    // Display error notification
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Failed to update book. Please try again.',
+                    });
+                });
+        }
+
+        // Function to delete a book
+        function deleteBook(bookId) {
+            // Retrieve the access token from session storage
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                // Handle the case where the access token is not available
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Access token not found. Please log in again.',
+                });
+                return;
+            }
+
+            axios.delete(`${mysvr}/books/${bookId}`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`, // Include the access token in the headers
+                },
+            })
+                .then((response) => {
+                    // Handle the success response
+                    iziToast.success({
+                        title: 'Success',
+                        message: 'Book deleted successfully.',
+                    });
+
+                    // You can perform additional actions after a successful delete
+                    // For example, you can update the UI to remove the deleted book.
+                })
+                .catch((error) => {
+                    // Display error notification
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Failed to delete book. Please try again.',
+                    });
+                });
+        }
+
+        // customers crud 
+
+        // Function to get a list of customers
+        async function getAllLoans() {
+            try {
+                const accessToken = sessionStorage.getItem('accessToken');
+                const response = await axios.get(`${mysvr}/loans`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                displayLoans(response.data)
+            } catch (error) {
+                iziToast.error({ title: 'Error', message: 'Failed to retrieve loans. Please try again.' });
+            }
+        }
+
+
+        function displayLoans(loans) {
+            const loansTableBody = document.getElementById('loansTableBody');
+            loansTableBody.innerHTML = '';
+
+            loans.forEach(loan => {
+                const row = loansTableBody.insertRow();
+                row.insertCell(0).textContent = loan.id;
+                row.insertCell(1).textContent = loan.custid;
+                row.insertCell(2).textContent = loan.bookid;
+                row.insertCell(3).textContent = loan.loanDate;
+                row.insertCell(4).textContent = loan.returnDate;
+            });
+        }
+
+
+
+
+        function displayCustomers(customers) {
+            const tableBody = document.getElementById('customersTableBody');
+            tableBody.innerHTML = '';
+
+            customers.forEach(customer => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = customer.id;
+                row.insertCell(1).textContent = customer.username;
+                row.insertCell(2).textContent = customer.password;
+                row.insertCell(3).textContent = customer.role;
+                row.insertCell(4).textContent = customer.name;
+                row.insertCell(5).textContent = customer.city;
+                row.insertCell(6).textContent = customer.age;
+            });
+        }
+
+
+        function updateCustomer(customerId, updatedData) {
+            // Retrieve the access token from session storage
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                // Handle the case where the access token is not available
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Access token not found. Please log in again.',
+                });
+                return;
+            }
+
+            axios.put(`${mysvr}/customers/${customerId}`, updatedData, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`, // Include the access token in the headers
+                    'Content-Type': 'application/json', // Set the content type as JSON
+                },
+            })
+                .then((response) => {
+                    // Handle the success response
+                    iziToast.success({
+                        title: 'Success',
+                        message: 'Customer information updated successfully.',
+                    });
+                    // You can perform further actions after a successful update
+                })
+                .catch((error) => {
+                    // Display error notification
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Failed to update customer information. Please try again.',
+                    });
+                });
+        }
+
+        // Function to delete a customer
+        function deleteCustomer(customerId) {
+            // Retrieve the access token from session storage
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                // Handle the case where the access token is not available
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Access token not found. Please log in again.',
+                });
+                return;
+            }
+
+            axios.delete(`${mysvr}/customers/${customerId}`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`, // Include the access token in the headers
+                },
+            })
+                .then((response) => {
+                    // Handle the success response
+                    iziToast.success({
+                        title: 'Success',
+                        message: 'Customer deleted successfully.',
+                    });
+                    // You can perform further actions after a successful delete
+                })
+                .catch((error) => {
+                    // Display error notification
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Failed to delete the customer. Please try again.',
+                    });
+                });
+        }
+
+
+        // Function to get all loans
+
+
+        // Function to delete a loan
+        function deleteLoan(custId, bookId) {
+            // Retrieve the access token from session storage
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                // Handle the case where the access token is not available
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Access token not found. Please log in again.',
+                });
+                return;
+            }
+
+            axios.delete(`${mysvr}/loans/${custId}/${bookId}`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`, // Include the access token in the headers
+                },
+            })
+                .then((response) => {
+                    // Handle the success response
+                    iziToast.success({
+                        title: 'Success',
+                        message: 'Loan deleted successfully.',
+                    });
+                    // You can perform any additional actions after successful deletion
+                })
+                .catch((error) => {
+                    // Display error notification
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Failed to delete loan. Please try again.',
+                    });
+                });
+        }
+        async function fetchCustomers() {
+            try {
+                const accessToken = sessionStorage.getItem('accessToken');
+                if (!accessToken) {
+                    iziToast.error({ title: 'Error', message: 'Access token not found. Please log in again.' });
+                    return;
+                }
+
+                const response = await axios.get(`${mysvr}/customers`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                displayCustomers(response.data); // Call display function here
+            } catch (error) {
+                iziToast.error({ title: 'Error', message: 'Failed to fetch customers. Please try again.' });
+            }
+        }
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            window.onload = async function () {
+                await fetchCustomers();
+                await get_all_books();
+                await getAllLoans();
+                // Additional functions
+            };
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
